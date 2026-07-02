@@ -2,4 +2,4 @@
 // Li trovi in Supabase: Project Settings > API
 
 const SUPABASE_URL = "https://esdequidhtzxhexefdyv.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_hL_I0hHOLWuyf28NTMPchQ_VIhV6fsM";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZGVxdWlkaHR6eGhleGVmZHl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5OTI2NjQsImV4cCI6MjA5ODU2ODY2NH0.q4BFl8AGVDY22sM6toiO4yKRLH2Ht9qnj1JMqDeJL9U";
