@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PostLab - Social Inspo Board</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">P</div>
+      <div>
+        <h1>PostLab</h1>
+        <p>Il Pinterest per social media manager</p>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <input id="searchInput" type="search" placeholder="Cerca: ristorante, streetwear, story, reel, premium..." />
+    </div>
+
+    <button id="openUpload" class="primary-btn">+ Carica idea</button>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h2>Trova ispirazioni social già pronte da adattare ai tuoi clienti.</h2>
+      <p>Carica screenshot, grafiche, stories, cover reel e campagne. Tutti gli utenti vedranno le nuove ispirazioni pubblicate.</p>
+    </div>
+    <div class="hero-card">
+      <span>Format consigliato</span>
+      <strong>Story 3 slide</strong>
+      <p>Problema → Soluzione → CTA</p>
+    </div>
+  </section>
+
+  <nav class="filters">
+    <button class="filter active" data-filter="all">Tutto</button>
+    <button class="filter" data-filter="story">Stories</button>
+    <button class="filter" data-filter="reel">Reel</button>
+    <button class="filter" data-filter="carosello">Caroselli</button>
+    <button class="filter" data-filter="post">Post</button>
+    <button class="filter" data-filter="adv">Adv</button>
+  </nav>
+
+  <main>
+    <aside class="sidebar">
+      <h3>Board</h3>
+      <button class="board-btn active" data-board="all">Tutte le idee</button>
+      <button class="board-btn" data-board="Abbigliamento">Abbigliamento</button>
+      <button class="board-btn" data-board="Ristoranti">Ristoranti</button>
+      <button class="board-btn" data-board="Palestre">Palestre</button>
+      <button class="board-btn" data-board="Eventi">Eventi</button>
+      <button class="board-btn" data-board="Locali">Locali</button>
+      <button class="board-btn" data-board="Ecommerce">Ecommerce</button>
+      <button class="board-btn" data-board="Beauty">Beauty</button>
+
+      <div class="tip">
+        <strong>Come usarla</strong>
+        <p>Salva reference, aggiungi note e usa il generatore per trasformare l’idea in un contenuto originale.</p>
+      </div>
+
+      <div class="status" id="statusBox">Connessione database...</div>
+    </aside>
+
+    <section>
+      <div class="section-title">
+        <h3>Ispirazioni</h3>
+        <span id="counter"></span>
+      </div>
+      <div id="grid" class="masonry"></div>
+    </section>
+  </main>
+
+  <dialog id="uploadModal">
+    <form id="uploadForm" method="dialog" class="modal">
+      <div class="modal-head">
+        <h2>Carica nuova ispirazione</h2>
+        <button type="button" id="closeUpload" class="icon-btn">×</button>
+      </div>
+
+      <label>
+        Immagine
+        <input id="imageInput" type="file" accept="image/*" required />
+      </label>
+
+      <label>
+        Titolo idea
+        <input id="titleInput" type="text" placeholder="Es. Story promo nuova collezione" required />
+      </label>
+
+      <div class="two">
+        <label>
+          Settore
+          <select id="sectorInput">
+            <option>Abbigliamento</option>
+            <option>Ristoranti</option>
+            <option>Palestre</option>
+            <option>Eventi</option>
+            <option>Locali</option>
+            <option>Ecommerce</option>
+            <option>Hotel</option>
+            <option>Beauty</option>
+            <option>Sport</option>
+          </select>
+        </label>
+
+        <label>
+          Formato
+          <select id="formatInput">
+            <option value="story">Story</option>
+            <option value="reel">Reel</option>
+            <option value="carosello">Carosello</option>
+            <option value="post">Post</option>
+            <option value="adv">Adv</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="two">
+        <label>
+          Obiettivo
+          <select id="goalInput">
+            <option>Vendere</option>
+            <option>Engagement</option>
+            <option>Lancio prodotto</option>
+            <option>Brand awareness</option>
+            <option>Evento</option>
+            <option>Promo</option>
+          </select>
+        </label>
+
+        <label>
+          Stile
+          <select id="styleInput">
+            <option>Street</option>
+            <option>Minimal</option>
+            <option>Premium</option>
+            <option>Ironico</option>
+            <option>Vintage</option>
+            <option>Sportivo</option>
+            <option>Corporate</option>
+          </select>
+        </label>
+      </div>
+
+      <label>
+        Tag
+        <input id="tagsInput" type="text" placeholder="Es. black friday, nuova collezione, sondaggio" />
+      </label>
+
+      <label>
+        Note / perché funziona
+        <textarea id="notesInput" placeholder="Es. Hook forte, CTA chiara, layout facile da riadattare..."></textarea>
+      </label>
+
+      <button id="saveButton" class="primary-btn full" type="submit">Pubblica ispirazione</button>
+      <p class="small-note">La reference sarà visibile a tutti gli utenti del sito.</p>
+    </form>
+  </dialog>
+
+  <dialog id="detailModal">
+    <div class="detail">
+      <button type="button" id="closeDetail" class="icon-btn close-detail">×</button>
+      <div class="detail-img-wrap">
+        <img id="detailImage" alt="Dettaglio ispirazione"/>
+      </div>
+      <div class="detail-content">
+        <span id="detailFormat" class="pill"></span>
+        <h2 id="detailTitle"></h2>
+        <p id="detailMeta"></p>
+        <h4>Perché funziona</h4>
+        <p id="detailNotes"></p>
+
+        <h4>Adatta questa idea</h4>
+        <div class="adapt-box">
+          <select id="adaptSector">
+            <option>Abbigliamento</option>
+            <option>Ristoranti</option>
+            <option>Palestre</option>
+            <option>Eventi</option>
+            <option>Locali</option>
+            <option>Ecommerce</option>
+            <option>Hotel</option>
+            <option>Beauty</option>
+            <option>Sport</option>
+          </select>
+          <button id="generateIdea" class="secondary-btn">Genera spunto</button>
+        </div>
+        <div id="ideaOutput" class="idea-output"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
