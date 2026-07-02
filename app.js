@@ -261,8 +261,7 @@ async function saveInspiration(event){
 
   }catch(err){
     console.error(err);
-    alert("Errore durante il caricamento. Controlla le policy Supabase e riprova.");
-  }finally{
+alert("Errore Supabase: " + (err.message || JSON.stringify(err)));  }finally{
     saveButton.disabled = false;
     saveButton.textContent = "Pubblica ispirazione";
   }
